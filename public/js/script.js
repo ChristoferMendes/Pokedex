@@ -5,6 +5,12 @@ const form = document.querySelector(".form");
 const input = document.querySelector(".input_search")
 const ButtonPrev = document.querySelector(".btn-prev");
 const ButtonNext = document.querySelector(".btn-next");
+const arrow = document.querySelector(".arrow")
+const moreInfoContainer = document.querySelector(".more-info-container")
+const moreInfoName = document.querySelector(".more-info-name")
+const moreInfoAbilities = document.querySelector(".more-info-abilities")
+const moreInfoGame = document.querySelector(".more-info-game")
+const moreInfoType = document.querySelector(".more-info-type")
 
 let searchPokemon = 1; //Variable of the current pokemon id
 
@@ -32,7 +38,7 @@ const renderPokemon = async (pokemon) =>{
     pokemonName.innerHTML = `"${input.value}" not found :(`; //If the data doesn't have any content, I say to my user
     pokemonNumber.innerHTML = ""; //Putting the number as 'nothing'
 
-    pokemonImage.src = "/public/img/missingno.png";
+    pokemonImage.src = "https://pa1.narvii.com/7402/fb3e64ac95aebaebe67cfdc166275796db4b8a60r1-226-453_hq.gif";
   }
     
   
@@ -41,12 +47,14 @@ const renderPokemon = async (pokemon) =>{
 form.addEventListener("submit", (event) =>{ //Search form tab
   event.preventDefault(); //Preventing the default event of the submit button
   renderPokemon(input.value.toLowerCase()); //Calling the renderPokemon function with input value
+  getMoreInfo(input.value, false);
 })
 
 ButtonNext.addEventListener("click",() =>{ //Button-next 
   pokemonImage.style.display = "inherit";//Resetting the display (in case the user click this after a non-succesfull search)
   searchPokemon+= 1; //If clicked, increase the Pokemon's current id variable
   renderPokemon(searchPokemon); //Call the renderPokemon with that increased variable
+  moreInfoContainer.classList.contains('visible') ?  getMoreInfo(searchPokemon, false) : console.log('tes');
 })
 
 ButtonPrev.addEventListener("click",() =>{//Button-prev
@@ -54,7 +62,49 @@ ButtonPrev.addEventListener("click",() =>{//Button-prev
     pokemonImage.style.display = "inherit";
     searchPokemon-= 1; //if clicked, decrease the Pokemon's current id variable
     renderPokemon(searchPokemon); //Call the renderPokemon with that decreased variable
+    moreInfoContainer.classList.contains('visible') ?  getMoreInfo(searchPokemon, false) : console.log('tes');
+    
   }
 })
 
 renderPokemon(searchPokemon); //Calling the function here just to have a "default value" (1 - Bulbasaur)
+
+//More infos
+async function getMoreInfo(pokemon, except){
+  if(moreInfoContainer.classList.contains('visible') && except == true){
+    moreInfoContainer.classList.replace('visible', 'invisible')
+  }else{
+    moreInfoContainer.classList.replace('invisible', 'visible'); 
+  const data = await fecthPokemon(pokemon)
+  const game = `https://pokemondb.net/${data.game_indices[0].version.name}-${data.game_indices[1].version.name}`
+ 
+
+  moreInfoName.innerHTML = `<h3>Pokemon name: <a>${data.name}</a></h3>`
+  moreInfoAbilities.innerHTML = `<h3>Initial abilities: ${data.abilities.map((row) => {
+    return(
+      `<a href="https://pokemondb.net/ability/${row.ability.name}" target="_blank"> ${row.ability.name}</a>`
+    )
+  })}</h3>`
+
+  moreInfoGame.innerHTML = `
+  <h3>First game: 
+    <a href='${game}' target="_blank"> ${data.game_indices[0].version.name}/${data.game_indices[1].version.name} </a>
+  </h3>`
+
+  if(data.types.length > 1){
+    const types = [`https://pokemondb.net/type/${data.types[0].type.name}`, `https://pokemondb.net/type/${data.types[1].type.name}`]
+    moreInfoType.innerHTML = `<h3>Types: ${data.types.map((row, i) => {
+      return ` <a href="${types[i]}" target="_blank">${row.type.name}</a>`
+    })}</h3>`
+  }else{
+    const type = [`https://pokemondb.net/type/${data.types[0].type.name}`]
+    moreInfoType.innerHTML = `<h3> Types: <a href="${type[0]}" target="_blank"> ${data.types[0].type.name}</a> </h3>`
+  }
+
+  }
+  
+}
+
+arrow.addEventListener("click", () =>{
+  getMoreInfo(searchPokemon, true)
+});

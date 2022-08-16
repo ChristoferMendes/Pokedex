@@ -99,9 +99,23 @@ main{
   font-size: .9rem;
 }
 
+/* More info area */
+
 .arrow{
   position: absolute;
   display: inline;
   top: 47%;
   margin-left: 5%;
+  cursor: pointer;
 }
+
+.arrow:hover{
+  font-size: 115%
+}
+
+.arrow:active{
+  color: red;
+}
+
+
+

@@ -1,0 +1,14 @@
+.more-info-container {
+  position: absolute;
+  display: inline;
+  bottom: 8%;
+  margin-left: 70%;
+  height: 80vh;
+  width: 25vw;
+  background-color: lightblue;
+  text-transform: capitalize;
+}
+
+.invisible {
+  display: none;
+}/*# sourceMappingURL=more-info.css.map */
