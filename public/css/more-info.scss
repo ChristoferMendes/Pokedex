@@ -1,4 +1,3 @@
-
 .more-info-container{
   position: absolute;
   display: inline;
@@ -6,11 +5,100 @@
   margin-left: 70%;
   height: 80vh;
   width: 25vw;
-  background-color: lightblue;
   text-transform: capitalize;
+  border: 2px solid black;
+  border-radius: 15px 50px;
 }
 
 
 .invisible {
   display: none;
+}
+
+.poke_name{
+  padding: 2%;
+}
+
+.more-info-text {
+  margin-top: 5%;
+}
+
+a {
+  display: block;
+  margin-top: 2%;
+  margin-bottom: 5%;
+}
+
+.type {
+  display: inline;
+  border-radius: 15px;
+  color: black;
+  text-decoration: none;
+  padding: 10px 15px;
+  transition: font-size .5s;
+}
+
+.type:hover {
+  transition: all .5s;
+  font-size: 120%;
+}
+
+.steel {
+	background-color: #f4f4f4;
+}
+
+.fire {
+	background-color: #FDDFDF;
+}
+
+.grass {
+	background-color: #DEFDE0;
+}
+
+.electric {
+	background-color: #FCF7DE;
+}
+
+.water, .ice {
+	background-color: #DEF3FD;
+}
+
+.ground {
+	background-color: #f4e7da;
+}
+
+.rock {
+	background-color: #d5d5d4;
+}
+
+.fairy {
+	background-color: #fceaff;
+}
+
+.poison {
+	background-color: #98d7a5;
+}
+
+.bug {
+	background-color: #f8d5a3;
+}
+
+.dragon {
+	background-color: #97b3e6;
+}
+
+.psychic {
+	background-color: #eaeda1;
+}
+
+.flying {
+	background-color: #F5F5F5;
+}
+
+.fighting {
+	background-color: #E6E0D4;
+}
+
+.normal {
+	background-color: #F5F5F5;
 }

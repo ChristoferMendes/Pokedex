@@ -40,7 +40,7 @@ const renderPokemon = async (pokemon) =>{
 
     pokemonImage.src = "https://pa1.narvii.com/7402/fb3e64ac95aebaebe67cfdc166275796db4b8a60r1-226-453_hq.gif"; //MissingNo.
   }
-    
+  getMoreInfo(searchPokemon, false)
   
 }
 
@@ -77,30 +77,43 @@ async function getMoreInfo(pokemon, except){
     moreInfoContainer.classList.replace('invisible', 'visible'); 
   const data = await fecthPokemon(pokemon)
   const game = `https://pokemondb.net/${data.game_indices[0].version.name}-${data.game_indices[1].version.name}`
-    
+  
+  const types = data.types.map(row => row.type.name);
+  const typesLink = [`https://pokemondb.net/type/${types[0]}`, `https://pokemondb.net/type/${types[1]}`]
 
-  moreInfoName.innerHTML = `<h3>Pokemon name: <a>${data.name}</a></h3>`
+  moreInfoName.innerHTML = `<h3>Pokemon name: <span class='poke_name ${types[0]}'>${data.name}</span></h3>`
+
   moreInfoAbilities.innerHTML = `<h3>Initial abilities: ${data.abilities.map((row) => {
     return(
       `<a href="https://pokemondb.net/ability/${row.ability.name}" target="_blank"> ${row.ability.name}</a>`
     )
-  })}</h3>`
+  }).join(' ')}</h3>`
+
+  const [first, second ] = data.game_indices.map(row => ({ name: row.version.name.split(' ')[0] }))
+
+  const firsts = `${first.name}-${second.name}`
 
   moreInfoGame.innerHTML = `
-  <h3>First game: 
-    <a href='${game}' target="_blank"> ${data.game_indices[0].version.name}/${data.game_indices[1].version.name} </a>
-  </h3>`
+  <h3> First games:
+    <a href='https://pokemondb.net/${firsts}' target='_blank'> ${first.name}/${second.name}</a> 
+  </h3>
+  `
 
-  if(data.types.length > 1){
-    const types = [`https://pokemondb.net/type/${data.types[0].type.name}`, `https://pokemondb.net/type/${data.types[1].type.name}`]
-    moreInfoType.innerHTML = `<h3>Types: ${data.types.map((row, i) => {
-      return ` <a href="${types[i]}" target="_blank">${row.type.name}</a>`
-    })}</h3>`
-  }else{
-    const type = [`https://pokemondb.net/type/${data.types[0].type.name}`]
-    moreInfoType.innerHTML = `<h3> Types: <a href="${type[0]}" target="_blank"> ${data.types[0].type.name}</a> </h3>`
-  }
 
+  types[1] != undefined 
+  ? 
+  moreInfoType.innerHTML = `
+    <h3>Types: 
+      <a class='type ${types[0]}' href='${typesLink[0]}' target='blank'>${types[0]}</a>
+      <a class='type ${types[1]}' href='${typesLink[1]}' target='blank'>${types[1]}</a>
+    </h3>
+  `
+  :
+  moreInfoType.innerHTML = `
+    <h3>Types: 
+      <a class='type ${types[0]}' href='${typesLink[0]}' target='blank'>${types[0]}</a>
+    </h3>
+    `
   }
   
 }
@@ -108,3 +121,5 @@ async function getMoreInfo(pokemon, except){
 arrow.addEventListener("click", () =>{
   moreInfoContainer.classList.contains('invisible') ? getMoreInfo(searchPokemon, false) : getMoreInfo(searchPokemon, true)
 });
+
+
