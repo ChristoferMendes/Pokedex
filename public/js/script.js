@@ -25,8 +25,8 @@ const fecthPokemon = async (pokemon) =>{
 const renderPokemon = async (pokemon) =>{
   pokemonName.innerHTML = "Loading..."; //Default values when searching
   pokemonNumber.innerHTML = ""; //Default values when searching
-
-  const data = await fecthPokemon(pokemon); //Awaiting to the fetch
+  searchPokemon = pokemon;
+  const data = await fecthPokemon(searchPokemon); //Awaiting to the fetch
   try{
     pokemonNumber.innerHTML = data.id; //Setting the number of the Pokemon to their id in the API
     pokemonName.innerHTML = data.name; //Setting the name of the Pokemon to their name in the API
@@ -38,7 +38,7 @@ const renderPokemon = async (pokemon) =>{
     pokemonName.innerHTML = `"${input.value}" not found :(`; //If the data doesn't have any content, I say to my user
     pokemonNumber.innerHTML = ""; //Putting the number as 'nothing'
 
-    pokemonImage.src = "https://pa1.narvii.com/7402/fb3e64ac95aebaebe67cfdc166275796db4b8a60r1-226-453_hq.gif";
+    pokemonImage.src = "https://pa1.narvii.com/7402/fb3e64ac95aebaebe67cfdc166275796db4b8a60r1-226-453_hq.gif"; //MissingNo.
   }
     
   
@@ -47,14 +47,14 @@ const renderPokemon = async (pokemon) =>{
 form.addEventListener("submit", (event) =>{ //Search form tab
   event.preventDefault(); //Preventing the default event of the submit button
   renderPokemon(input.value.toLowerCase()); //Calling the renderPokemon function with input value
-  getMoreInfo(input.value, false);
+  moreInfoContainer.classList.contains('visible') ? getMoreInfo(searchPokemon, false) : getMoreInfo(searchPokemon, true);
 })
 
 ButtonNext.addEventListener("click",() =>{ //Button-next 
   pokemonImage.style.display = "inherit";//Resetting the display (in case the user click this after a non-succesfull search)
   searchPokemon+= 1; //If clicked, increase the Pokemon's current id variable
   renderPokemon(searchPokemon); //Call the renderPokemon with that increased variable
-  moreInfoContainer.classList.contains('visible') ?  getMoreInfo(searchPokemon, false) : console.log('tes');
+  moreInfoContainer.classList.contains('visible') ?  getMoreInfo(searchPokemon, false) : getMoreInfo(searchPokemon, true);
 })
 
 ButtonPrev.addEventListener("click",() =>{//Button-prev
@@ -62,7 +62,7 @@ ButtonPrev.addEventListener("click",() =>{//Button-prev
     pokemonImage.style.display = "inherit";
     searchPokemon-= 1; //if clicked, decrease the Pokemon's current id variable
     renderPokemon(searchPokemon); //Call the renderPokemon with that decreased variable
-    moreInfoContainer.classList.contains('visible') ?  getMoreInfo(searchPokemon, false) : console.log('tes');
+    moreInfoContainer.classList.contains('visible') ?  getMoreInfo(searchPokemon, false) : getMoreInfo(searchPokemon, true);
     
   }
 })
@@ -73,11 +73,11 @@ renderPokemon(searchPokemon); //Calling the function here just to have a "defaul
 async function getMoreInfo(pokemon, except){
   if(moreInfoContainer.classList.contains('visible') && except == true){
     moreInfoContainer.classList.replace('visible', 'invisible')
-  }else{
+  }else if(except == false) {
     moreInfoContainer.classList.replace('invisible', 'visible'); 
   const data = await fecthPokemon(pokemon)
   const game = `https://pokemondb.net/${data.game_indices[0].version.name}-${data.game_indices[1].version.name}`
- 
+    
 
   moreInfoName.innerHTML = `<h3>Pokemon name: <a>${data.name}</a></h3>`
   moreInfoAbilities.innerHTML = `<h3>Initial abilities: ${data.abilities.map((row) => {
@@ -106,5 +106,5 @@ async function getMoreInfo(pokemon, except){
 }
 
 arrow.addEventListener("click", () =>{
-  getMoreInfo(searchPokemon, true)
+  moreInfoContainer.classList.contains('invisible') ? getMoreInfo(searchPokemon, false) : getMoreInfo(searchPokemon, true)
 });
