@@ -40,7 +40,7 @@ const renderPokemon = async (pokemon) =>{
 
     pokemonImage.src = "https://pa1.narvii.com/7402/fb3e64ac95aebaebe67cfdc166275796db4b8a60r1-226-453_hq.gif"; //MissingNo.
   }
-  getMoreInfo(searchPokemon, false)
+
   
 }
 
